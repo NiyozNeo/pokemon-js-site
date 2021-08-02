@@ -1,12 +1,79 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.min.css">
 </head>
-<body>
-    
+
+<body class="body">
+    <header class="header">
+        <div class="container header__container">
+            <div class="img__wrapper"><img class="header__img" src="img/pokemonlogo.png" alt=""></div>
+            <button class="open">
+                <img src="img/iconmonstr-favorite-4-48.png" alt="">
+            </button>
+            <nav class="nav">
+                <form class="form">
+                    <select class="type__selection">
+                        <option>All</option>
+                    </select>
+                    <input class="form__search" type="search" placeholder="Search...">
+                    <select class="sort__selection">
+                        <option value="0">Aa-Zz</option>
+                        <option value="1">Zz-Aa</option>
+                        <option value="2">Young-Old</option>
+                        <option value="3">Old-Young</option>
+                    </select>
+                    <button class="genre__btn" type="submit">Search</button>
+                </form>
+            </nav>
+        </div>
+    </header>
+    <main>
+        <section class="pokemons">
+            <div class="container">
+                <ul class="list"></ul>
+            </div>
+        </section>
+    </main>
+
+    <div class="modal">
+        <button class="modal__btn">
+            <img src="img/icon.png" alt="">
+        </button>
+        <div class="modal__field">
+            <ul class="modal__list">
+                
+            </ul>
+        </div>
+    </div>
+    <template id="template">
+        <li class="item">
+            <img class="item__img" src="htpps://picsum.photos/157" alt="">
+            <div class="wrapper">
+                <div class="wrapper__secondary">
+                    <h3 class="item__name">Pokemons</h3>
+                    <p class="item__type">Grass, Poison</p>
+                    <div class="items__wrapper">
+                        <p class="item__kilo"></p>
+                        <p class="item__age">34 age</p>
+                    </div>
+                </div>
+                <button class="item__save">
+                    <svg class="svg" width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181"/></svg>
+                </button>
+            </div>
+        </li>
+    </template>
+    <script src="js/pokemons.js"></script>
+    <script src="js/main.js"></script>
 </body>
+
 </html>
