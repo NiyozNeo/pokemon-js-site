@@ -130,7 +130,9 @@ img {
     position: absolute;
     width: 30%;
     height: 100vh;
-    background: red;
+    background: #FFEDA9;
+    border: 2px solid #000000;
+    box-sizing: border-box;
 
 }
 .modal__field {
