@@ -9,11 +9,13 @@ let template = findEl("#template").content
 let select = findEl(".type__selection");
 let search = findEl(".form__search");
 let sortSelect = findEl(".sort__selection")
-let modalList = findEl(".modal__list")
-let openM = findEl(".open")
-let modal = findEl(".modal")
+
+let modalList = findEl(".modal__list");
+let openM = findEl(".open");
+let modal = findEl(".modal");
 let body = findEl("body");
-let modalBtn = findEl(".modal__btn")
+let modalBtn = findEl(".modal__btn");
+let modalImg = findEl(".modal__img")
 let pokemonsTypes = [];
 
 
@@ -54,7 +56,7 @@ let sortObj = {
 
 
 /* create pokemon list */
-function create (arr) {
+function create(arr) {
     let temp = template.cloneNode(true);
     temp.querySelector(".item__img").src = arr.img;
     temp.querySelector(".item__img").width = 157;
@@ -62,11 +64,12 @@ function create (arr) {
     temp.querySelector(".item__name").textContent = arr.name;
     temp.querySelector(".item__type").textContent = arr.type;
     temp.querySelector(".item__kilo").textContent = arr.weight;
+    temp.querySelector(".item__save").dataset.id = arr.id;
     let age = 2021 - new Date(arr.birth_date).getFullYear()
     temp.querySelector(".item__age").textContent = `${age} age`;
     ul.appendChild(temp)
     for (const iterator of arr.type) {
-        
+
         findByGenre(iterator)
     }
 }
@@ -76,15 +79,15 @@ function create (arr) {
 
 /* Find by types */
 function findByGenre(type) {
-    
+
     if (!pokemonsTypes.includes(type)) {
         pokemonsTypes.push(type)
-      
+
         /* Find Genre and add to option */
         let option = createEl("option");
         option.textContent = type;
         select.appendChild(option)
-        
+
     }
 }
 
@@ -97,15 +100,15 @@ function searchFunc(evt) {
 
     let value = select.value;
     let searchValue = search.value;
-   
+
     let sortValue = sortSelect.value;
     console.log(sortValue);
     let newRegExp = new RegExp(searchValue, "gi")
- 
+
     let foundPokemons = pokemons.filter(pokemon => {
         if (value === "All") {
             return pokemons
-            
+
         } else {
             return pokemon.type.includes(value)
         }
@@ -125,34 +128,63 @@ pokemons.forEach(element => {
 
 form.addEventListener("submit", searchFunc);
 
-let buttons = document.querySelectorAll(".item__save");
-let itemClone = document.querySelectorAll(".item");
+let savedPokemons = JSON.parse(window.localStorage.getItem("saved")) || []
 
-buttons.forEach( (element, i) =>{
-    element.addEventListener("click", function (){
-        let cloned = itemClone[i].cloneNode(true);
-        
-        cloned.querySelector(".item__save").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"/></svg>`
-
-        cloned.querySelector(".item__save").classList.add("remove");
-        cloned.querySelector(".item__save").classList.remove("item__save");
-
-        modalList.appendChild(cloned);
-
-        itemClone[i].querySelector(".item__save").innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 4.248c-3.148-5.402-12-3.825-12 2.944 0 4.661 5.571 9.427 12 15.808 6.43-6.381 12-11.147 12-15.808 0-6.792-8.875-8.306-12-2.944z"/></svg>`;
-        itemClone[i].querySelector(".item__save").classList.add("unlike");
-        itemClone[i].querySelector(".item__save").classList.remove("item__save");
-        
-    })
-
-})
 
 openM.addEventListener("click", function () {
-    modal.style = "display: block;"
-    body.classList.add("body--active")
-})
-modalBtn.addEventListener("click", function (){
-    modal.style = "display: none;"
-    body.classList.remove("body--active")
+    body.classList.add("body--active");
+    modal.style = "display: block";
+    body.addEventListener("click", function (evt) {
+        if (evt.target === body  || evt.target === modalBtn || evt.target === modalImg) {
+            body.classList.remove("body--active");
+            modal.style = "display: none";
+        }
+    })
 })
 
+
+
+ul.addEventListener("click", function(evt) {
+    if(evt.target.matches(".item__save")){
+        let findPok = pokemons.find(pokemon => String(pokemon.id) === evt.target.dataset.id);
+        if(!savedPokemons.includes(findPok)) {
+            savedPokemons.push(findPok)
+            
+        }
+        window.localStorage.setItem("saved", JSON.stringify(savedPokemons))
+        modalList.innerHTML = null
+        
+        savedPokemons.forEach(element => createModal(element))
+        // createModal(findPok);
+    }
+ 
+})
+
+savedPokemons.forEach(element => createModal(element))
+function createModal(arr) {
+    let temp = template.cloneNode(true);
+    temp.querySelector(".item__img").src = arr.img;
+    temp.querySelector(".item__img").width = 157;
+    temp.querySelector(".item__img").height = 157;
+    temp.querySelector(".item__name").textContent = arr.name;
+    temp.querySelector(".item__type").textContent = arr.type;
+    temp.querySelector(".item__kilo").textContent = arr.weight;
+    temp.querySelector(".item__save").dataset.id = arr.id;
+    temp.querySelector(".item__save").textContent = 'Delate';
+    temp.querySelector(".item__save").classList.add("delate");
+    temp.querySelector(".item__save").classList.remove("item__save");
+    let age = 2021 - new Date(arr.birth_date).getFullYear()
+    temp.querySelector(".item__age").textContent = `${age} age`;
+    modalList.appendChild(temp)
+}
+
+modalList.addEventListener("click", function (evt) {
+    if(evt.target.matches(".delate")) {
+        
+        let foundIndex = savedPokemons.findIndex(item => String(item.id) === evt.target.dataset.id)
+        savedPokemons.splice(foundIndex, 1);
+        modalList.innerHTML = ''
+        window.localStorage.setItem("saved", JSON.stringify(savedPokemons))
+        savedPokemons.forEach(element => createModal(element))
+    }
+})
